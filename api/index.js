@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
+<<<<<<< HEAD
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -7,6 +8,15 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from './models/User.js';
 import Todo from './models/Todo.js';
+=======
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
+const Todo = require('./models/Todo');
+>>>>>>> b8c2dcd7a056b00a434035797bda1bb33d470a54
 
 import todoRoutes from './routes/todoRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -77,4 +87,21 @@ mongoose.connect(process.env.MONGO_URL, {
   })
   .catch(err => {
     console.error('Erro ao conectar no MongoDB:', err);
+<<<<<<< HEAD
   });
+=======
+  });
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
+// Função para registrar um novo usuário
+async function registerUser(name, email, password) {
+  const res = await fetch(`${apiUrl}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password }),
+    credentials: 'include'
+  });
+  return res.json();
+}
+>>>>>>> b8c2dcd7a056b00a434035797bda1bb33d470a54
