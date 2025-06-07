@@ -37,7 +37,7 @@ Um aplicativo de lista de tarefas minimalista inspirado no tweek.so, desenvolvid
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/minimal-todo.git
+git clone https://github.com/juleklazura/Minimaltodo.git
 cd minimal-todo
 ```
 
