@@ -127,7 +127,14 @@ export default function App({ user, onLogout }: AppProps) {
       body: JSON.stringify({ text: newTask, date })
     })
     const newTodo = await res.json()
-    setTodos([newTodo, ...todos])
+    setTodos((todos: Todo[]) => {
+      // Mantém a nova tarefa na mesma linha onde foi criada
+      const dayTodos = todos.filter((todo: Todo) => todo.date === date)
+      const otherTodos = todos.filter((todo: Todo) => todo.date !== date)
+      const before = dayTodos.slice(0, lineIdx)
+      const after = dayTodos.slice(lineIdx)
+      return [...otherTodos, ...before, newTodo, ...after]
+    })
     setEditing(null)
     setNewTask('')
   }
@@ -139,12 +146,12 @@ export default function App({ user, onLogout }: AppProps) {
       body: JSON.stringify({ done: !done })
     })
     const updated = await res.json()
-    setTodos(todos => todos.map(todo => todo._id === id ? updated : todo))
+    setTodos((todos: Todo[]) => todos.map((todo: Todo) => todo._id === id ? updated : todo))
   }
 
   const removeTodo = async (id: string) => {
     await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
-    setTodos(todos => todos.filter(todo => todo._id !== id))
+    setTodos((todos: Todo[]) => todos.filter((todo: Todo) => todo._id !== id))
   }
 
   const handleEdit = (todo: Todo) => {
@@ -159,7 +166,7 @@ export default function App({ user, onLogout }: AppProps) {
       body: JSON.stringify({ text: editTask.value })
     })
     const updated = await res.json()
-    setTodos(todos => todos.map(t => t._id === todo._id ? updated : t))
+    setTodos((todos: Todo[]) => todos.map((t: Todo) => t._id === todo._id ? updated : t))
     setEditTask(null)
   }
 
@@ -191,7 +198,7 @@ export default function App({ user, onLogout }: AppProps) {
       ) : (
         <div className="week-grid">
           {week.map((date, i) => {
-            const dayTodos = todos.filter(todo => todo.date === formatISO(date)).slice(0, 15)
+            const dayTodos = todos.filter((todo: Todo) => todo.date === formatISO(date)).slice(0, 15)
             let dayClass = ''
             if (weekType === 'past') dayClass = 'past'
             else if (weekType === 'future') dayClass = 'future'
