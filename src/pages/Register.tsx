@@ -29,6 +29,7 @@ export default function Register({ onRegister, onBack }: { onRegister: () => voi
   const [success, setSuccess] = useState(false);
 
   const strength = passwordStrength(password);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ export default function Register({ onRegister, onBack }: { onRegister: () => voi
     }
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:4000/auth/register', {
+      const res = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
@@ -97,4 +98,4 @@ export default function Register({ onRegister, onBack }: { onRegister: () => voi
       </form>
     </div>
   );
-} 
+}
