@@ -260,10 +260,6 @@ body {
   display: inline-block;
   position: relative;
   transition: border-color 0.2s, background 0.2s;
-  /* Centraliza o checkmark */
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .custom-checkbox:checked {
   background: #111;
