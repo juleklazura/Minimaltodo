@@ -33,6 +33,30 @@ export default function Register({ onRegister, onBack }: { onRegister: () => voi
   const strength = passwordStrength(password);
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  // Função para checar requisitos da senha
+  const passwordRequirements = [
+    {
+      label: 'Pelo menos 8 caracteres',
+      valid: password.length >= 8
+    },
+    {
+      label: 'Uma letra maiúscula',
+      valid: /[A-Z]/.test(password)
+    },
+    {
+      label: 'Uma letra minúscula',
+      valid: /[a-z]/.test(password)
+    },
+    {
+      label: 'Um número',
+      valid: /[0-9]/.test(password)
+    },
+    {
+      label: 'Um caractere especial',
+      valid: /[^A-Za-z0-9]/.test(password)
+    }
+  ];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -114,6 +138,30 @@ export default function Register({ onRegister, onBack }: { onRegister: () => voi
           </div>
         </div>
         <div className="password-strength-label" style={{color: strength.color}}>{password && `Senha ${strength.label}`}</div>
+        <ul style={{
+          listStyle: 'none',
+          padding: 0,
+          margin: '4px 0 8px 0',
+          fontSize: '0.98rem',
+          width: '100%'
+        }}>
+          {passwordRequirements.map((req, idx) => (
+            <li key={idx} style={{
+              color: req.valid ? '#4caf50' : '#e57373',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              fontWeight: 500
+            }}>
+              {req.valid ? (
+                <span style={{fontSize: '1.1em'}}>✅</span>
+              ) : (
+                <span style={{fontSize: '1.1em'}}>❌</span>
+              )}
+              {req.label}
+            </li>
+          ))}
+        </ul>
         <button type="submit" disabled={loading || !name || !email || !isStrongPassword(password)}>
           {loading ? 'Registrando...' : 'Registrar'}
         </button>
