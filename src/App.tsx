@@ -286,11 +286,19 @@ export default function App({ user, onLogout }: AppProps) {
                                 className="custom-checkbox"
                               />
                               <span
-                                className="todo-text"
-                                style={{ textDecoration: todo.done ? 'line-through' : 'none', cursor: 'grab' }}
+                                className={
+                                  `todo-text` +
+                                  (todo.done ? ' done' : '') +
+                                  (dayClass === 'past' ? ' past-todo' : '')
+                                }
+                                style={{
+                                  textDecoration: todo.done ? 'line-through' : 'none',
+                                  color: dayClass === 'past' ? '#bbb' : (todo.done ? '#bbb' : '#222'),
+                                  opacity: dayClass === 'past' ? 0.6 : 1,
+                                  cursor: 'grab'
+                                }}
                                 draggable
                                 onMouseDown={e => {
-                                  // Só ativa drag se clicar e segurar no nome
                                   e.currentTarget.parentElement?.setAttribute('draggable', 'true')
                                 }}
                                 onMouseUp={e => {
