@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { useState } from 'react';
 
 function passwordStrength(password: string) {
@@ -24,6 +25,7 @@ export default function Register({ onRegister, onBack }: { onRegister: () => voi
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -75,13 +77,38 @@ export default function Register({ onRegister, onBack }: { onRegister: () => voi
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
-        <div className="password-input-group" style={{width: '100%'}}>
+        <div className="password-input-group" style={{width: '100%', position: 'relative'}}>
           <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="Senha forte"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            style={{paddingRight: '38px'}}
           />
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+            onClick={() => setShowPassword(v => !v)}
+            style={{
+              position: 'absolute',
+              right: 8,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
+              width: 28,
+              height: 28
+            }}
+          >
+            {showPassword ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C7 19 2.73 15.11 1 12c.73-1.26 2.07-3.17 4.06-4.94M9.88 9.88A3 3 0 0 0 12 15a3 3 0 0 0 2.12-5.12"/><path d="M1 1l22 22"/></svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="12" rx="10" ry="6"/><circle cx="12" cy="12" r="3"/></svg>
+            )}
+          </button>
           <div className="password-strength-bar">
             <div className="password-strength-fill" style={{width: strength.value * 33 + '%', background: strength.color}} />
           </div>
