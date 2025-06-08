@@ -131,9 +131,13 @@ export default function App({ user, onLogout }: AppProps) {
       // Mantém a nova tarefa na mesma linha onde foi criada
       const dayTodos = todos.filter((todo: Todo) => todo.date === date)
       const otherTodos = todos.filter((todo: Todo) => todo.date !== date)
+      // Remove qualquer tarefa "vazia" (caso algum bug)
       const before = dayTodos.slice(0, lineIdx)
       const after = dayTodos.slice(lineIdx)
-      return [...otherTodos, ...before, newTodo, ...after]
+      // Adiciona a nova tarefa na posição correta
+      const newDayTodos = [...before, newTodo, ...after]
+      // Junta as tarefas do dia na ordem correta com as dos outros dias
+      return [...otherTodos, ...newDayTodos]
     })
     setEditing(null)
     setNewTask('')
@@ -235,7 +239,15 @@ export default function App({ user, onLogout }: AppProps) {
                             </form>
                           ) : (
                             <>
-                              <span onClick={() => !isInactive && toggleTodo(todo._id, todo.done)}>{todo.text}</span>
+                              <input
+                                type="checkbox"
+                                checked={todo.done}
+                                onChange={() => toggleTodo(todo._id, todo.done)}
+                                className="custom-checkbox"
+                              />
+                              <span className="todo-text" style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>
+                                {todo.text}
+                              </span>
                               {!isInactive && (
                                 <>
                                   <button className="edit-btn" onClick={() => handleEdit(todo)} title="Editar">
