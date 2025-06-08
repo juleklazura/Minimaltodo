@@ -17,6 +17,7 @@ body {
   max-width: 100vw;
   box-sizing: border-box;
   padding: 0;
+  background: #fff;
 }
 .week-form {
   display: flex;
@@ -63,7 +64,7 @@ body {
   justify-content: center;
   gap: 24px;
   padding: 18px 0 0 0;
-  background: #fff;
+  background: #fafafa;
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 36px;
