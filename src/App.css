@@ -317,7 +317,7 @@ body {
 }
 @media (max-width: 900px) {
   .week-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     grid-auto-rows: minmax(200px, 1fr);
   }
   .week-header {
