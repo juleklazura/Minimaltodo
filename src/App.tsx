@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
 
@@ -13,7 +15,7 @@ interface AppProps {
   onLogout: () => void
 }
 
-const API_URL = '/todos'
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:4000') + '/todos'
 const weekDays = [
   { name: 'Segunda', short: 'Mon' },
   { name: 'Terça', short: 'Tue' },
