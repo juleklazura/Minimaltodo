@@ -70,6 +70,8 @@ export default function App({ user, onLogout }: AppProps) {
   const [editing, setEditing] = useState<{ dayIdx: number, lineIdx: number } | null>(null)
   const [newTask, setNewTask] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null)
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const week = getWeekByOffset(weekOffset)
   const weekType = getWeekType(week)
@@ -174,6 +176,14 @@ export default function App({ user, onLogout }: AppProps) {
     setEditTask(null)
   }
 
+  // Função para reordenar tarefas do dia
+  function reorderDayTodos(dayTodos: Todo[], from: number, to: number) {
+    const updated = [...dayTodos]
+    const [removed] = updated.splice(from, 1)
+    updated.splice(to, 0, removed)
+    return updated
+  }
+
   return (
     <div className="week-calendar">
       <div className="menu-bar">
@@ -223,8 +233,38 @@ export default function App({ user, onLogout }: AppProps) {
                     const todo = dayTodos[idx]
                     const isEditing = editing && editing.dayIdx === i && editing.lineIdx === idx
                     return (
-                      <li key={idx} className={`todo-item${todo?.done ? ' done' : ''}`}
-                        onMouseLeave={() => !isEditing && setEditing(null)}>
+                      <li
+                        key={idx}
+                        className={`todo-item${todo?.done ? ' done' : ''}${draggedIdx === idx ? ' dragging' : ''}${dragOverIdx === idx ? ' dragover' : ''}`}
+                        onMouseLeave={() => !isEditing && setEditing(null)}
+                        draggable={!!todo}
+                        onDragStart={e => {
+                          if (!todo) return
+                          setDraggedIdx(idx)
+                        }}
+                        onDragOver={e => {
+                          e.preventDefault()
+                          if (draggedIdx !== null && draggedIdx !== idx) setDragOverIdx(idx)
+                        }}
+                        onDrop={e => {
+                          e.preventDefault()
+                          if (draggedIdx !== null && draggedIdx !== idx) {
+                            // Atualiza a ordem das tarefas do dia
+                            const newDayTodos = reorderDayTodos(dayTodos, draggedIdx, idx)
+                            // Atualiza o estado global mantendo a ordem dos outros dias
+                            setTodos((todos: Todo[]) => {
+                              const otherTodos = todos.filter((t: Todo) => t.date !== formatISO(date))
+                              return [...otherTodos, ...newDayTodos]
+                            })
+                          }
+                          setDraggedIdx(null)
+                          setDragOverIdx(null)
+                        }}
+                        onDragEnd={() => {
+                          setDraggedIdx(null)
+                          setDragOverIdx(null)
+                        }}
+                      >
                         {todo ? (
                           editTask && editTask.id === todo._id ? (
                             <form onSubmit={e => { e.preventDefault(); saveEdit(todo) }} style={{ width: '100%' }}>
@@ -245,7 +285,18 @@ export default function App({ user, onLogout }: AppProps) {
                                 onChange={() => toggleTodo(todo._id, todo.done)}
                                 className="custom-checkbox"
                               />
-                              <span className="todo-text" style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>
+                              <span
+                                className="todo-text"
+                                style={{ textDecoration: todo.done ? 'line-through' : 'none', cursor: 'grab' }}
+                                draggable
+                                onMouseDown={e => {
+                                  // Só ativa drag se clicar e segurar no nome
+                                  e.currentTarget.parentElement?.setAttribute('draggable', 'true')
+                                }}
+                                onMouseUp={e => {
+                                  e.currentTarget.parentElement?.setAttribute('draggable', 'false')
+                                }}
+                              >
                                 {todo.text}
                               </span>
                               {!isInactive && (
