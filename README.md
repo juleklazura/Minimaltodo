@@ -1,6 +1,7 @@
 # Minimal Todo
 
 Um aplicativo de lista de tarefas minimalista inspirado no tweek.so, desenvolvido com React, TypeScript, Node.js e MongoDB.
+Ou utilizar a exibição: https://minimaltodo-beta.vercel.app/
 
 ## 🚀 Funcionalidades
 
