@@ -16,10 +16,19 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
-// CORS configurado para aceitar apenas o frontend do Vercel
+// CORS configurado para aceitar múltiplos domínios do .env
+const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [];
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
+  origin: function (origin, callback) {
+    // Permite requests sem origin (ex: mobile, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: process.env.CORS_CREDENTIALS === 'true'
 }));
 app.use(express.json());
 
