@@ -206,7 +206,7 @@ export default function App({ user, onLogout }: AppProps) {
         <button className="nav-btn" onClick={() => setWeekOffset(weekOffset + 1)}>&gt;</button>
       </div>
       {loading ? (
-        <div style={{textAlign: 'center', color: '#bbb', padding: '20px'}}>Carregando...</div>
+        <div style={{textAlign: 'center', color: '#111', padding: '20px'}}>Carregando...</div>
       ) : error ? (
         <div style={{textAlign: 'center', color: '#ff4444', padding: '20px'}}>{error}</div>
       ) : (
