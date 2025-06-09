@@ -132,12 +132,4 @@ minimal-todo/
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## ✨ Agradecimentos
 
-- [tweek.so](https://tweek.so) pela inspiração
-- [React](https://reactjs.org)
-- [MongoDB](https://www.mongodb.com)
-- [Node.js](https://nodejs.org)
-
----
-# Minimaltodo
